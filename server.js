@@ -9,6 +9,9 @@ app.use(cors());
 //File Resourse
 const signin = require('./controler/signinhandler')
 const register = require('./controler/registerhandler')
+const menuitems = require('./controler/menuitemshandler')
+const shopcategory = require('./controler/shopcategoryhandler')
+const userinformation = require('./controler/userinformtionhandler')
 
 //Connection
 var db = require('knex')({
@@ -25,7 +28,10 @@ var db = require('knex')({
 app.get('/' , (req,res) => {res.send(database.user)})
 app.post('/signin' , (req,res) => {signin.signinhandler(req,res,db,bcrypt)})
 app.post('/register' , (req,res) => {register.registerhandler(req,res,db,bcrypt)})
+app.get('/menuitems', (req,res) => {menuitems.menuitemshandler(req,res,db)})
+app.get('/shopcategory', (req,res) => {shopcategory.shopcategoryhandler(req,res,db)})
+app.put('/userinformation', (req, res) => {userinformation.userinformationhandler(req,res,db)})
 
-app.listen(3001, () => {
-   console.log(`App runing on 3001 ports`)
+app.listen(3006, () => {
+   console.log(`App runing on 3006 ports`)
 })
