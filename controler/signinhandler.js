@@ -3,7 +3,7 @@ const signinhandler =  (req,res,db,bcrypt) => {
    if(!email || !password){
    	 return res.status('400').json('form submission faied due to incomplete info ')
    }
-   db.select('email' , 'hash').from('login')
+   db.select('email','password').from('users')
    .where('email','=',email)
    .then(data => {
       const valid = bcrypt.compareSync(password, data[0].hash);

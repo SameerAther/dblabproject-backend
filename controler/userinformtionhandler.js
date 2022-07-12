@@ -1,9 +1,10 @@
 const userinformationhandler = (req, res, db) => {
-  const {id} = req.body;
-  db('users')
-  .join('login', 'login.id', 'users.id')
-  .select('*')
-  .where({'users.id': id}).then(data => res.json(data))
+	db.select('*')
+	.from('users')
+	.then(users => {
+			console.log(users)
+			res.json(users)
+	}).catch(err => res.json("Error Getting User"))
 }
 
 module.exports = {userinformationhandler}

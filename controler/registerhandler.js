@@ -1,37 +1,14 @@
 const registerhandler =  (req,res,db,bcrypt) => {
    const {name , email ,password} = req.body;
+   let cart = []
    if(!email || !name || !password){
    	 return res.status('400').json('form submission faied due to incomplete info ')
    }
-   const hash = bcrypt.hashSync(password);
-   console.log(hash)
-      db.transaction(trx => {
-        trx.insert({
-          email:email,
-          hash:hash
-        })
-        .into('login')
-        .then(signemail => {
-            return trx('users')
-             .insert({
-                 email:email,
-                 name:name,
-                 joined: new Date()
-              })
-             .then(user => {
-               trx.select('*').from('users').where({id:user})
-                 .then(resp => {
-                 	res.json(resp[0])
-                 })
-             })
-             .catch(err => res.status(400).json("error logging in"))
-        })
-        .then(trx.commit)
-        .then(trx.rollback)
-      })
-      .catch(err => res.status(400).json("error not logining"))
-}
+   db.insert({
+    email: email, password: password, name: name, joined: new Date(),
+    signedIn: true, cart: JSON.stringify(cart)
+   }).into('users').then(function(data) {
+    res.send(data);
+  }).catch(err => {res.json("error logging in.Please try again")})}
 
-module.exports={
-   registerhandler:registerhandler
-}
+module.exports={registerhandler:registerhandler}
